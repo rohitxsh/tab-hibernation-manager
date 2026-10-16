@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Tab Hibernation Manager</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <h1>Current tab</h1>
+    <div class="current-row">
+      <img id="current-icon" class="favicon" alt="" width="20" height="20">
+      <span id="current-title" class="title"></span>
+    </div>
+    <div class="actions">
+      <button id="current-keep" class="btn toggle" data-action="toggleKeepAwake" aria-pressed="false">⚡ Keep Awake</button>
+      <button id="current-hibernate" class="btn" data-action="hibernate">💤 Hibernate Now</button>
+    </div>
+  </header>
+
+  <main>
+    <h2>Tabs in this window</h2>
+    <ul id="tab-list" class="tab-list"></ul>
+  </main>
+
+  <footer>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+    <button class="btn primary wide" data-action="hibernateAll">Hibernate All Unprotected Inactive Tabs</button>
+  </footer>
+
+  <template id="tab-item">
+    <li class="tab">
+      <img class="favicon" alt="" width="16" height="16">
+      <div class="info">
+        <span class="title"></span>
+        <span class="badge"></span>
+      </div>
+      <button class="icon-btn toggle" data-action="toggleKeepAwake" aria-pressed="false" aria-label="Keep Awake">⚡</button>
+      <button class="btn small" data-action="hibernate">Hibernate</button>
+    </li>
+  </template>
+
+  <script src="popup.js"></script>
+</body>
+</html>

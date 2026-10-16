@@ -1,0 +1,4 @@
+# Packing outputs; the .pem is the private signing key and must never be committed
+*.pem
+*.crx
+*.zip
