@@ -117,7 +117,23 @@ async function runOnTab(action, tab) {
     const [active] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
     tabId = active?.id;
   }
-  if (tabId != null) await actions[action]({ tabId });
+  if (tabId == null) return;
+  try {
+    await actions[action]({ tabId });
+  } catch (err) {
+    await flashError(tabId, err);
+  }
+}
+
+// Shortcuts and the context menu have no UI of their own, so show failures as a red badge for 2s.
+async function flashError(tabId, err) {
+  console.warn(err);
+  await chrome.action.setBadgeBackgroundColor({ tabId, color: '#dc2626' }).catch(() => {});
+  await chrome.action.setBadgeText({ tabId, text: 'ERR' }).catch(() => {});
+  setTimeout(async () => {
+    await chrome.action.setBadgeBackgroundColor({ tabId, color: '#b45309' }).catch(() => {});
+    await setBadge(tabId, tabId in (await getStore()));
+  }, 2000);
 }
 chrome.contextMenus.onClicked.addListener((info, tab) => runOnTab(info.menuItemId, tab).catch(console.warn));
 chrome.commands.onCommand.addListener((command, tab) => runOnTab(command, tab).catch(console.warn));
